@@ -42,6 +42,36 @@ public sealed class CompileSetTests
     }
 
     [TestMethod]
+    public void MultiTargetProjectListsTheUnionOfEveryFramework()
+    {
+        using var fixture = new Fixture();
+        // Before the fix the outer (no TargetFramework) evaluation listed 0 files for this shape.
+        fixture.Write(
+            "App/App.csproj",
+            """
+            <Project Sdk="Microsoft.NET.Sdk">
+              <PropertyGroup><TargetFrameworks>net8.0;net10.0</TargetFrameworks></PropertyGroup>
+              <ItemGroup Condition="'$(TargetFramework)' != 'net8.0'"><Compile Remove="Net8Only.cs" /></ItemGroup>
+            </Project>
+            """
+        );
+        fixture.Write("App/Shared.cs", "class Shared { }");
+        fixture.Write("App/Net8Only.cs", "class Net8Only { }");
+        fixture.Solution("App/App.csproj");
+
+        var (exitCode, result) = fixture.Run();
+
+        Assert.AreEqual(0, exitCode);
+        var project = result.Projects.Single();
+        Assert.IsTrue(project.Success, project.Error);
+        CollectionAssert.AreEquivalent(
+            new[] { "Shared.cs", "Net8Only.cs" },
+            project.Files.Select(file => Path.GetFileName(file.FullPath)).ToArray()
+        );
+        Assert.AreEqual(0, project.DuplicateCount, "files shared by both frameworks are listed once, not counted as duplicates");
+    }
+
+    [TestMethod]
     public void ExplicitCompileItemsPreserveLinksAndExcludeUnlistedFiles()
     {
         using var fixture = new Fixture();

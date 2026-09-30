@@ -16,7 +16,8 @@ function Resolve-InputPath([string]$value) {
     return [System.IO.Path]::GetFullPath((Join-Path $root $value))
 }
 function Build-Errors([string]$project, [string]$copyRoot) {
-    $output = @(& dotnet build $project -v q -nologo 2>&1 | ForEach-Object { $_.ToString() })
+    # dotnet prints each diagnostic more than once; an identical line (same file, position, message) is one error.
+    $output = @(& dotnet build $project -v q -nologo 2>&1 | ForEach-Object { $_.ToString() } | Select-Object -Unique)
     $buildExit = $LASTEXITCODE
     $errors = [System.Collections.Generic.List[string]]::new()
     foreach ($line in $output) {
