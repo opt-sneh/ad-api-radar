@@ -1,0 +1,36 @@
+syntax = "proto3";
+package google.ads.googleads.v99.resources;
+import "google/api/resource.proto";
+import "google/ads/googleads/v99/enums/v99-enums.proto";
+message OtherResource {
+  option (google.api.resource) = { type: "example/other" pattern: "other/{id}" };
+  string secret = 1;
+}
+message Campaign {
+  option (google.api.resource) = { type: "example/campaign" pattern: "campaigns/{id}" };
+  string name = 1;
+  string added_field = 2;
+  string changed_field = 3;
+  string deprecated_field = 4 [deprecated = true];
+  NetworkSettings network_settings = 5;
+  OtherResource other_resource = 6;
+  string repeated_field = 7;
+  .google.ads.googleads.v99.enums.StatusEnum.Status status = 8;
+  string video_brand_safety_suitability = 9;
+  string required_later = 10 [(google.api.field_behavior) = REQUIRED];
+  repeated .google.ads.googleads.v99.enums.StatusEnum.Status statuses = 11;
+  message NetworkSettings {
+    bool target_search_network = 1;
+    NetworkSettings cycle = 2;
+  }
+}
+message SmartCampaignSetting {
+  option (google.api.resource) = { type: "example/smart" pattern: "smart/{id}" };
+  string business_profile_location = 1;
+  string asset = 2;
+}
+message Recommendation {
+  option (google.api.resource) = { type: "example/recommendation" pattern: "recommendation/{id}" };
+  string call_asset_recommendation = 1;
+  string flexible_rule_user_list = 2;
+}

@@ -1,0 +1,34 @@
+{
+  "profiles": {
+    "run latest release": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\server\\code\\ad-api-radar",
+      "commandLineArgs": "run"
+    },
+    "1 index (optmyzr checkout)": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\server\\code\\ad-api-radar",
+      "commandLineArgs": "index --repo C:/server/code/optmyzr --compile-set data/out/cs-head.json --out data/out/index-head.json"
+    },
+    "2 check (optmyzr checkout)": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\server\\code\\ad-api-radar",
+      "commandLineArgs": "check --index data/out/index-head.json --repo C:/server/code/optmyzr --target v25 --sdk 26.1.0 --out data/out/findings-head.json --html data/out/report-head.html"
+    },
+    "3 fix (optmyzr checkout)": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\server\\code\\ad-api-radar",
+      "commandLineArgs": "fix --findings data/out/findings-head.json --repo C:/server/code/optmyzr --out data/fixes/head"
+    },
+    "0 compile-set (optmyzr checkout)": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\server\\code\\ad-api-radar",
+      "commandLineArgs": "compile-set --repo C:/server/code/optmyzr --sln code/backend/OptmyzrProcessorService/OptmyzrProcessorService.sln --out data/out/cs-head.json"
+    },
+    "v23 replay: check + score": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\server\\code\\ad-api-radar",
+      "commandLineArgs": "check --index data/out/index-015.json --repo data/bench/015fb0c7e73 --target v23 --next v24,v25 --sdk 25.1.0 --out data/out/findings-015.json --html data/out/report-015.html"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+syntax = "proto3";
+package google.ads.googleads.v98.resources;
+import "google/api/resource.proto";
+import "google/ads/googleads/v98/enums/v98-enums.proto";
+message OtherResource {
+  option (google.api.resource) = { type: "example/other" pattern: "other/{id}" };
+  string secret = 1;
+}
+message Campaign {
+  option (google.api.resource) = { type: "example/campaign" pattern: "campaigns/{id}" };
+  string name = 1;
+  string removed_field = 2;
+  int64 changed_field = 3;
+  string deprecated_field = 4;
+  NetworkSettings network_settings = 5;
+  OtherResource other_resource = 6;
+  repeated string repeated_field = 7;
+  .google.ads.googleads.v98.enums.StatusEnum.Status status = 8;
+  string video_brand_safety_suitability = 9;
+  string required_later = 10;
+  repeated .google.ads.googleads.v98.enums.StatusEnum.Status statuses = 11;
+  message NetworkSettings {
+    bool target_search_network = 1;
+    NetworkSettings cycle = 2;
+  }
+}
+message RemovedResource {
+  option (google.api.resource) = { type: "example/removed" pattern: "removed/{id}" };
+  string name = 1;
+  string detail = 2;
+}
+message SmartCampaignSetting {
+  option (google.api.resource) = { type: "example/smart" pattern: "smart/{id}" };
+  string business_location = 1;
+  string extension = 2;
+}

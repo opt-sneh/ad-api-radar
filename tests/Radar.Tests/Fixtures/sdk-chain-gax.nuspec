@@ -1,0 +1,4 @@
+<package><metadata><id>Google.Api.Gax.Grpc</id><version>4.2.0</version><dependencies>
+  <group targetFramework="net6.0"><dependency id="Google.Protobuf" version="[3.31.1, 4.0.0)" /></group>
+  <group targetFramework="netstandard2.0"><dependency id="Google.Protobuf" version="[2.0.0, 3.0.0)" /></group>
+</dependencies></metadata></package>

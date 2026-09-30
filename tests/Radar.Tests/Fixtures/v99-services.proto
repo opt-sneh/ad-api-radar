@@ -1,0 +1,16 @@
+syntax = "proto3";
+package google.ads.googleads.v99.services;
+message Request {}
+message Response {}
+message GenerateBenchmarksMetricsResponse { string customer_metrics = 1; }
+message Incentive { string incentive_type = 1; }
+message IncentiveOffer { string offer_type = 1; }
+message FetchIncentiveRequest { string incentive_type = 1; }
+message ForecastAdGroup { repeated string keywords = 1; }
+message Targeting { repeated int64 plannable_location_ids = 2; }
+message GenerateReachForecastRequest { string cookie_frequency_cap_setting = 1; }
+message GoogleAdsRow { string lift_measurement_campaign = 2; string lift_measurement_status = 3; }
+service CampaignService {
+  rpc Get(Request) returns (Response);
+  rpc Added(Request) returns (Response);
+}

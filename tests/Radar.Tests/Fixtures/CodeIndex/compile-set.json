@@ -1,0 +1,24 @@
+{
+  "Repo": "{{ROOT}}",
+  "Solution": "Fixture.sln",
+  "Configuration": "Debug",
+  "Projects": [
+    {
+      "ProjectPath": "ProjectA/ProjectA.csproj",
+      "Success": true,
+      "Files": [
+        { "FullPath": "{{ROOT}}/GoogleFields.cs", "RelativePath": "GoogleFields.cs", "Linked": false },
+        { "FullPath": "{{ROOT}}/SaFields.cs", "RelativePath": "SaFields.cs", "Linked": false },
+        { "FullPath": "{{ROOT}}/Uses.cs", "RelativePath": "Uses.cs", "Linked": false },
+        { "FullPath": "{{ROOT}}/Mysql.cs", "RelativePath": "Mysql.cs", "Linked": false }
+      ]
+    },
+    {
+      "ProjectPath": "ProjectB/ProjectB.csproj",
+      "Success": true,
+      "Files": [
+        { "FullPath": "{{ROOT}}/Uses.cs", "RelativePath": "Uses.cs", "Linked": true }
+      ]
+    }
+  ]
+}

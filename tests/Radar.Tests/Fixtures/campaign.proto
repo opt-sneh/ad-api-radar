@@ -1,0 +1,6 @@
+syntax = "proto3";
+package google.ads.googleads.v99.resources;
+message Campaign {
+  string name = 1;
+  int64 old_id = 2 [deprecated = true];
+}
