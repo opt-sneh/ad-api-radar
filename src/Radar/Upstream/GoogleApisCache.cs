@@ -53,7 +53,7 @@ internal sealed class GoogleApisCache(string repoRoot)
             throw new InvalidOperationException(
                 $"Googleapis cache has an unexpected origin: {remote}"
             );
-        if (existing && Git(DirectoryPath, "status", "--porcelain").Length != 0)
+        if (existing && HasLocalChanges(DirectoryPath))
             throw new InvalidOperationException(
                 "Googleapis cache has local changes; refusing to overwrite them."
             );
@@ -66,6 +66,13 @@ internal sealed class GoogleApisCache(string repoRoot)
         Git(DirectoryPath, "checkout", "--detach", "FETCH_HEAD");
         return Git(DirectoryPath, "rev-parse", "HEAD").Trim();
     }
+
+    // A clone made with --no-checkout (FetchVersionFolders creates one on a fresh machine) has no index
+    // yet, and `git status` then lists every file as deleted. Nothing has been checked out, so nothing
+    // can have been edited: only a checked-out cache can have local changes.
+    internal static bool HasLocalChanges(string directory) =>
+        File.Exists(Path.Combine(directory, ".git", "index"))
+        && Git(directory, "status", "--porcelain").Length != 0;
 
     private static string Git(string workingDirectory, params string[] arguments)
     {
