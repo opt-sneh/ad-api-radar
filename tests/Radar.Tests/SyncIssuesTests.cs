@@ -7,14 +7,14 @@ namespace Radar.Tests;
 public sealed class SyncIssuesTests
 {
     [TestMethod]
-    public void OneIssuePerFileWithActionableFindingsOnly()
+    public void OneIssueForTheWholeScanWithActionableFindingsOnly()
     {
         string root = RepoRoot();
         string findings = Path.Combine(Path.GetTempPath(), "radar-" + Guid.NewGuid().ToString("N") + ".json");
         try
         {
             File.WriteAllText(findings, """
-                {"findings":[
+                {"target":"v23","next":["v24","v25"],"findings":[
                   {"category":"UPCOMING_BREAK","severity":"high","confidence":"high","path":"Campaign.Gone","file":"src/A.cs","line":10,"lines":[10],"message":"Removed in v25.","evidence":["e1"],"actionable":true},
                   {"category":"UPCOMING_BREAK","severity":"high","confidence":"high","path":"Campaign.Also","file":"src/A.cs","line":20,"lines":[20],"message":"Removed in v25.","evidence":["e2"],"actionable":true},
                   {"category":"UPCOMING_BREAK","severity":"high","confidence":"high","path":"Campaign.Gone","file":"src/A.cs","line":30,"lines":[30],"message":"Removed in v25.","evidence":["e3"],"actionable":true},
@@ -32,12 +32,9 @@ public sealed class SyncIssuesTests
 
             Assert.AreEqual(0, process.ExitCode, output + stderr.Result);
             var creates = output.Split('\n').Select(line => line.Trim()).Where(line => line.StartsWith("create", StringComparison.Ordinal)).ToArray();
-            CollectionAssert.AreEqual(new[]
-            {
-                "create  [radar] A.cs: 2 findings (Upcoming break)", // the repeated Campaign.Gone counts once
-                "create  [radar] Silent risk: Criterion.Language (B.cs)",
-            }, creates);
-            StringAssert.Contains(output, "(2 files with actionable findings)");
+            // One Issue for everything; the repeated Campaign.Gone in A.cs counts once, C.cs is not actionable.
+            CollectionAssert.AreEqual(new[] { "create  [radar] API upgrade v23 -> v25: 3 findings in 2 files" }, creates);
+            StringAssert.Contains(output, "Scan Issue: 3 actionable findings in 2 files.");
             Assert.IsFalse(output.Contains("C.cs", StringComparison.Ordinal), "non-actionable findings get no Issue");
         }
         finally { if (File.Exists(findings)) File.Delete(findings); }
