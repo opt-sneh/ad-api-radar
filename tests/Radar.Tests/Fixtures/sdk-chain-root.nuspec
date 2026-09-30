@@ -1,0 +1,4 @@
+<package><metadata><id>Google.Ads.GoogleAds</id><version>26.1.0</version><dependencies>
+  <group targetFramework="net8.0"><dependency id="Google.Ads.GoogleAds.Core" version="[4.0.8, 5.0.0)" /><dependency id="Grpc.Net.Client" version="2.0.0" /></group>
+  <group targetFramework="netstandard2.1"><dependency id="Google.Protobuf" version="[1.0.0, 2.0.0)" /></group>
+</dependencies></metadata></package>

@@ -1,0 +1,4 @@
+syntax = "proto3";
+package google.ads.googleads.v99.common;
+message Metrics { int64 clicks = 1; }
+message Segments { string device = 1; }

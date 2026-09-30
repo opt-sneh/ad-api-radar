@@ -1,0 +1,7 @@
+syntax = "proto3";
+package google.api;
+import "google/protobuf/descriptor.proto";
+message ResourceDescriptor { string type = 1; string pattern = 2; }
+extend google.protobuf.MessageOptions { ResourceDescriptor resource = 1053; }
+enum FieldBehavior { FIELD_BEHAVIOR_UNSPECIFIED = 0; OPTIONAL = 1; REQUIRED = 2; }
+extend google.protobuf.FieldOptions { repeated FieldBehavior field_behavior = 1052; }

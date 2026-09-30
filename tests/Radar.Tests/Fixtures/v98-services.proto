@@ -1,0 +1,16 @@
+syntax = "proto3";
+package google.ads.googleads.v98.services;
+message Request {}
+message Response {}
+message GenerateBenchmarksMetricsResponse { int64 customer_metrics = 1; string removed_detail = 2; }
+message Incentive { string type = 1; }
+message IncentiveOffer { string type = 1; }
+message FetchIncentiveRequest { string type = 1; }
+message ForecastAdGroup { repeated string biddable_keywords = 1; }
+message Targeting { string plannable_location_id = 1; repeated int64 plannable_location_ids = 2; }
+message GenerateReachForecastRequest { int32 cookie_frequency_cap = 1; }
+message GoogleAdsRow { string campaign_lifecycle_goal = 1; }
+service CampaignService {
+  rpc Get(Request) returns (Response);
+  rpc Removed(Request) returns (Response);
+}

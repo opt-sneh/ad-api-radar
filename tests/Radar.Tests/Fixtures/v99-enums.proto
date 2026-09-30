@@ -1,0 +1,18 @@
+syntax = "proto3";
+package google.ads.googleads.v99.enums;
+message StatusEnum {
+  enum Status {
+    UNSPECIFIED = 0;
+    ADDED = 2;
+  }
+}
+message CriterionTypeEnum {
+  enum CriterionType {
+    UNSPECIFIED = 0;
+    LANGUAGE = 1;
+    SEARCH = 2;
+  }
+}
+message AdTypeEnum {
+  enum AdType { UNSPECIFIED = 0; CALL_AD = 1; }
+}
