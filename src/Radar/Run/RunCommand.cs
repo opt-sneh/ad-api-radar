@@ -250,11 +250,16 @@ public static class RunCommand
         if (code != 0) throw new InvalidOperationException($"{step} failed (exit {code}).");
     }
 
-    private static string FindRoot()
+    // The current directory first, then the tool's own build folder, so `dotnet run --project radar/src/Radar`
+    // works from any working directory (CI checks radar out into a subfolder).
+    private static string FindRoot() => FindRoot(Environment.CurrentDirectory, AppContext.BaseDirectory);
+
+    internal static string FindRoot(params string[] starts)
     {
-        for (var directory = new DirectoryInfo(Environment.CurrentDirectory); directory is not null; directory = directory.Parent)
-            if (File.Exists(Path.Combine(directory.FullName, "AdApiRadar.slnx"))) return directory.FullName;
-        throw new DirectoryNotFoundException("AdApiRadar.slnx not found above the current directory.");
+        foreach (string start in starts)
+            for (var directory = new DirectoryInfo(start); directory is not null; directory = directory.Parent)
+                if (File.Exists(Path.Combine(directory.FullName, "AdApiRadar.slnx"))) return directory.FullName;
+        throw new DirectoryNotFoundException("AdApiRadar.slnx not found above the current directory or the radar build folder.");
     }
 
     private static string ProcessOutput(string executable, IReadOnlyList<string> arguments)
