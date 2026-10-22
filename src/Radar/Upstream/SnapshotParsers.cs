@@ -43,20 +43,24 @@ public static class SnapshotParsers
     {
         var table = FindTable(
             html,
-            ["API version", "Release date", "Sunset date", "Upgrade guide"]
+            ["API version", "Release date", "Sunset date"]
         );
         var rows = new List<SunsetRow>();
         foreach (var cells in DataRows(table))
         {
             if (cells.Count == 1)
                 continue; // Section headings span the entire table.
-            if (cells.Count != 4)
+            // Google renamed "Upgrade guide" and added columns (2026-10); the guide link stays 4th.
+            if (cells.Count < 4)
                 throw new FormatException(
                     "Sunset table has a row with an unexpected column count."
                 );
             string version = PlainText(cells[0]);
-            if (!Regex.IsMatch(version, @"^v\d+(?:\.\d+)?\*?$", RegexOptions.IgnoreCase))
+            // Cells may carry a label, e.g. "v26 (Latest)".
+            var versionMatch = Regex.Match(version, @"^(v\d+(?:\.\d+)?\*?)(?:\s*\([^)]*\))?$", RegexOptions.IgnoreCase);
+            if (!versionMatch.Success)
                 throw new FormatException($"Sunset table has an unexpected version: {version}.");
+            version = versionMatch.Groups[1].Value;
             string releaseDate = PlainText(cells[1]);
             string sunsetDate = PlainText(cells[2]);
             if (releaseDate.Length == 0 || sunsetDate.Length == 0)
@@ -221,7 +225,7 @@ public static class SnapshotParsers
             var actual = firstRow?.SelectNodes("./th")?.Select(PlainText).ToArray();
             if (
                 actual is not null
-                && actual.SequenceEqual(headers, StringComparer.OrdinalIgnoreCase)
+                && actual.Take(headers.Length).SequenceEqual(headers, StringComparer.OrdinalIgnoreCase)
             )
                 return table;
         }
