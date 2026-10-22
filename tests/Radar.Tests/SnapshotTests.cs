@@ -7,6 +7,14 @@ namespace Radar.Tests;
 public sealed class SnapshotTests
 {
     [TestMethod]
+    public void SunsetParserReadsSixColumnLayoutFromOctober2026()
+    {
+        var rows = SnapshotParsers.ParseSunset(Fixture("sunset-2026-10.html"));
+        Assert.IsTrue(rows.Any(row => row.Version.StartsWith("v26")));
+        Assert.IsTrue(rows.All(row => row.SunsetDate.Length > 0));
+    }
+
+    [TestMethod]
     public void SunsetParserReadsVersionRowsAndPreservesTentativeText()
     {
         var rows = SnapshotParsers.ParseSunset(Fixture("sunset.html"));
